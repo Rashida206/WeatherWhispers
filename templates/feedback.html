@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Form</title>
+    <style>
+        body {
+            font-family: 'Dancing Script', cursive;
+            background-color: black;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: white;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+        }
+
+        .navbar a {
+            font-size: 18px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(0, 0, 0, 1);
+        }
+
+        h1 {
+            margin: 20px 0;
+            font-size: 36px;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 1.5px solid white;
+            white-space: nowrap;
+            animation: typing 2s steps(15), cursor 0.5s step-end infinite alternate;
+            font-size: 28px;
+        }
+
+        @keyframes cursor {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .typewriter::after {
+            content: "|";
+            position: absolute;
+            top: 0;
+            right: 0;
+            animation: blink 0.5s step-end infinite;
+        }
+
+        .feedback-form {
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <h1>
+                <span class="typewriter">WeatherWhispers</span>
+            </h1>
+        </div>
+        <div>
+            <a href="/about">About Us</a>
+            <a href="/feedback">Feedback</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+    <form action="/submit-feedback" method="post" class="feedback-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for "email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="feedback">Feedback:</label>
+        <textarea id="feedback" name="feedback" rows="4" required></textarea><br>
+
+        <label for="rating">Rating:</label>
+        <select id="rating" name="rating" required>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+            <option value="4">4 stars</option>
+            <option value="5">5 stars</option>
+        </select><br>
+
+        <input type="submit" value="Submit" class="btn">
+    </form>
+</body>
+</html>
