@@ -1,0 +1,96 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+    <form action="/ask" method="post">
+        <input type="text" name="question" id="question" placeholder="Ask a question">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="answer"></div>
+    
+    
+    
+
+    <script>
+        const form = document.querySelector('form');
+        const questionInput = document.querySelector('#question');
+        const answerDiv = document.querySelector('#answer');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = questionInput.value;
+            const response = await fetch('/ask', {
+                method: 'POST',
+                body: new URLSearchParams({ question }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+
+            const data = await response.text();
+            answerDiv.innerHTML = data;
+        });
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbox</title>
+</head>
+<body>
+    <h1>Chatbox</h1>
+    <div id="chat-container">
+        <!-- Chat history will be displayed here -->
+    </div>
+    <form id="question-form">
+        <input type="text" id="question" placeholder="Ask a question">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const chatContainer = document.querySelector('#chat-container');
+        const questionForm = document.querySelector('#question-form');
+        const questionInput = document.querySelector('#question');
+
+        questionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = questionInput.value;
+
+            // Display the user's question in the chat history
+            chatContainer.innerHTML += `<p class="user-question">User: ${question}</p>`;
+            
+            // Send the question to the server (you can use AJAX or fetch)
+
+            // Replace this with an actual API call to your Flask server
+            fetch('/ask', {
+                method: 'POST',
+                body: new URLSearchParams({ question }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    chatContainer.innerHTML += `<p class="bot-answer">Bot: Error - ${data.error}</p>`;
+                } else {
+                    // Display the bot's answer in the chat history
+                    chatContainer.innerHTML += `<p class="bot-answer">Bot: ${data.answer}</p>`;
+                }
+            })
+            .catch(error => {
+                chatContainer.innerHTML += `<p class="bot-answer">Bot: Error - ${error.message}</p>`;
+            });
+
+            // Clear the input field
+            questionInput.value = '';
+        });
+    </script>
+</body>
+</html>
+

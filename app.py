@@ -1,9 +1,11 @@
 import pandas as pd
 import os
 import pickle
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import openai
 
 application = Flask(__name__)
+openai.api_key = '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'
 
 # Use a secret key for session management
 application.secret_key = 'your_secret_key'
@@ -21,6 +23,29 @@ def home_page():
     else:
         # If the user is not logged in, redirect to the login page
         return redirect(url_for('login'))
+    
+@application.route('/ask',methods=['GET','POST'])
+def chatbox():
+    if request.method == 'GET':
+        return render_template('chatbox.html')
+    else:
+        try:
+            question = request.form['question']
+
+            prompt = f"You are an agricultural expert. {question}"
+            # Make an API call to GPT-3
+            response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=50  # Adjust this based on the desired response length
+            )
+
+        # Get the answer from GPT-3
+            answer = response.choices[0].text
+
+            return jsonify({'answer': answer})
+        except Exception as e:
+            return jsonify({'error': str(e)})
 
 @application.route('/pred', methods=['GET', 'POST'])
 def predict_temp():
