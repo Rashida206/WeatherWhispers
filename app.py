@@ -76,6 +76,28 @@ def signup():
 
     return render_template('signup.html')
 
+@application.route('/feedback')
+def feedback_form():
+    return render_template('feedback.html')
+
+@application.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    name = request.form['name']
+    email = request.form['email']
+    feedback = request.form['feedback']
+    rating = request.form['rating']
+
+    # Save the data to a CSV file
+    with open('feedback.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([name, email, feedback, rating])
+
+    return redirect('/thank-you')
+
+@application.route('/thank-you')
+def thank_you():
+    return "Thank you for your feedback!"
+
 # Replace this with your own user verification logic
 def verify_user(username, password):
     # Load user data from CSV file and check for a match
