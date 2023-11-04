@@ -3,6 +3,7 @@ import os
 import pickle
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import openai
+import csv
 
 application = Flask(__name__)
 openai.api_key = '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'
