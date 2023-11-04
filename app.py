@@ -56,7 +56,7 @@ def predict_temp():
         start_date = pd.to_datetime(request.form['start_date'])
         end_date = pd.to_datetime(request.form['end_date'])
 
-        with open(r'C:\Users\DELL\Desktop\demo\final\model.pkl', 'rb') as f:
+        with open('model.pkl', 'rb') as f:
             model = pickle.load(f)
 
         model_last_date = pd.to_datetime("2019-12-30")
