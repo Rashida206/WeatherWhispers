@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import openai
 import csv
 
-application = Flask(__name__)
+application = Flask(__name__, template_folder='templates', static_folder='static')
 openai.api_key = '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'
 
 # Use a secret key for session management
