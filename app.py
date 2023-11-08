@@ -102,6 +102,14 @@ def signup():
 
     return render_template('signup.html')
 
+@application.route('/About')
+def about():
+    return render_template('about.html')
+
+@application.route('/Contact')
+def contact():
+    return render_template('contact.html')
+
 @application.route('/feedback')
 def feedback_form():
     return render_template('feedback.html')
@@ -148,5 +156,5 @@ def register_user(username, password):
         file.write(f'{username},{password}\n')
     return True
 
-if __name__ == "__main__":
+if _name_ == "__main__":
     application.run(host='0.0.0.0', debug=True)
