@@ -156,5 +156,5 @@ def register_user(username, password):
         file.write(f'{username},{password}\n')
     return True
 
-if _name_ == "__main__":
+if __name__ == "__main__":
     application.run(host='0.0.0.0', debug=True)
