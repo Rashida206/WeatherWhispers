@@ -4,6 +4,7 @@ import pickle
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import openai
 import csv
+import datetime  # Added for logging
 
 application = Flask(__name__, template_folder='templates', static_folder='static')
 openai.api_key = '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'
@@ -16,16 +17,24 @@ if not os.path.isfile('users.csv'):
     with open('users.csv', 'w') as file:
         pass
 
+# Create a CSV file for logging
+if not os.path.isfile('logs.csv'):
+    with open('logs.csv', 'w') as file:
+        pass
+
+# Log function for storing logs in a CSV file
+def log_to_csv(log_entry):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-d %H:%M:%S")
+    with open('logs.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([timestamp, log_entry])
+
 @application.route('/')
-def home_page():
-    # Check if the user is logged in using the session
-    if 'username' in session:
-        return render_template('home.html')
-    else:
-        # If the user is not logged in, redirect to the login page
-        return redirect(url_for('login'))
-    
-@application.route('/ask',methods=['GET','POST'])
+def default_route():
+    # Redirect to the login page when the application starts
+    return redirect(url_for('login'))
+
+@application.route('/ask', methods=['GET', 'POST'])
 def chatbox():
     if request.method == 'GET':
         return render_template('chatbox.html')
@@ -36,17 +45,23 @@ def chatbox():
             prompt = f"You are an agricultural expert. {question}"
             # Make an API call to GPT-3
             response = openai.Completion.create(
-            engine="text-davinci-002",
-            prompt=prompt,
-            max_tokens=50  # Adjust this based on the desired response length
+                engine="text-davinci-002",
+                prompt=prompt,
+                max_tokens=50  # Adjust this based on the desired response length
             )
 
-        # Get the answer from GPT-3
+            # Get the answer from GPT-3
             answer = response.choices[0].text
 
             return jsonify({'answer': answer})
         except Exception as e:
+            # Log the error
+            log_to_csv(f"Error: An error occurred in /ask route - {str(e)}")
             return jsonify({'error': str(e)})
+
+
+# Rest of the routes and functions remain the same
+
 
 @application.route('/pred', methods=['GET', 'POST'])
 def predict_temp():
@@ -101,14 +116,6 @@ def signup():
             return "Registration failed. <a href='/signup'>Try again</a>"
 
     return render_template('signup.html')
-
-@application.route('/About')
-def about():
-    return render_template('about.html')
-
-@application.route('/Contact')
-def contact():
-    return render_template('contact.html')
 
 @application.route('/feedback')
 def feedback_form():
